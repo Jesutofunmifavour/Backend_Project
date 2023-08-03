@@ -1,8 +1,7 @@
 const User = require('../Models/userSchema');
-const bcrypt = require('bcrypt');
+// const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
-const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
 
@@ -42,7 +41,8 @@ const userSignup = async (req, res, next) => {
     }
 
 
-    const hashedPassword = bcrypt.hashSync(password, 10);
+    // const saltRounds = 10;
+    // const hashedPassword = bcrypt.hashSync(password, saltRounds);
 
     if (password !== confirmPassword) {
         res.status(400).json({ message: "Password and confirm password do not match!" })
@@ -51,7 +51,7 @@ const userSignup = async (req, res, next) => {
     const newUser = new User ({
         fullName,
         email,
-        password: hashedPassword,
+        password,
     })
 
     try {
@@ -80,7 +80,8 @@ const userSignup = async (req, res, next) => {
     }
     
 
-    return res.status(200).json({ message: 'Registration successful! Check your email.', newUser} )
+    // return res.status(200).json({ message: 'Registration successful! Check your email.', newUser} )
+    res.redirect('/login');
 }
 
 
@@ -98,7 +99,7 @@ const userLogin = async (req, res, next) => {
         return res.status(400).status({ message: "User does not exist! Proceed to the signup page."})
     }
 
-    const isPasswordCorrect = bcrypt.compare(password, existingUser.password)
+    const isPasswordCorrect = (password, existingUser.password)
     if (!isPasswordCorrect) {
         return res.status(400).json({message: 'Invalid Email/Password'});
     }
@@ -116,7 +117,8 @@ const userLogin = async (req, res, next) => {
         sameSite: 'lax',
     });
 
-    return res.status(200).json({message: 'Successfully logged in', user:existingUser, token });
+    // return res.status(200).json({message: 'Successfully logged in', user:existingUser, token });
+    res.redirect('/home');
 }
 
 
