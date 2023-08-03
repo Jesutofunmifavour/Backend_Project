@@ -1,7 +1,8 @@
 const express = require('express');
 const passport = require('passport');
 
-const { userSignup, userLogin } = require('../Controllers/userController')
+const { userSignup, userLogin } = require('../Controllers/userController');
+const { verify } = require('../Controllers/lawyerControl')
 
 const router = express.Router();
 
@@ -13,5 +14,6 @@ router.get( '/google/callback',
         failureRedirect: '/google/failure'
 }));
 router.post('/login', userLogin)
+router.post('/onboarding', verify)
 
 module.exports = router;
